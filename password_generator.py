@@ -2,21 +2,17 @@ import random
 import string
 import argparse
 
-# ... (предыдущие функции)
-
-def check_strength(password):
-    """Проверяет сложность пароля"""
-    strength = 0
-    if any(c.islower() for c in password): strength += 1
-    if any(c.isupper() for c in password): strength += 1
-    if any(c.isdigit() for c in password): strength += 1
-    if any(c in "!@#$%^&*()_+-=" for c in password): strength += 1
-    return strength
-
-if __name__ == "__main__":
-    # ... (предыдущий код аргументов)
+def generate_password(length=12, no_special=False, exclude_ambiguous=False):
+    characters = string.ascii_letters + string.digits
+    ambiguous = "lI1O0"
     
-    for i in range(args.count):
-        password = generate_password(args.length, args.no_special, args.exclude_ambiguous)
-        strength = check_strength(password)
-        print(f"Пароль {i+1} ({strength}/4): {password}")
+    if not no_special:
+        characters += "!@#$%^&*()_+-="
+    
+    if exclude_ambiguous:
+        # Исправление: убираем неоднозначные символы из всех категорий
+        characters = ''.join(c for c in characters if c not in ambiguous)
+    
+    return ''.join(random.choice(characters) for _ in range(length))
+
+# ... (остальной код без изменений)
